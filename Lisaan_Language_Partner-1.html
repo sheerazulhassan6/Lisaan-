@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lisaan — زبان — Language Partner</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@500;600;700&family=Noto+Nastaliq+Urdu:wght@500;600;700&display=swap');
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --sand: #ECE6D8;
+  --ink: #2B2620;
+  --clay: #B5532C;
+  --teal: #2E5C58;
+  --gold: #B8923D;
+  --card: #FBF8F1;
+  --line: #D9CFB8;
+}
+
+body {
+  font-family:'Inter',sans-serif;
+  background:var(--sand);
+  color:var(--ink);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:0 0 40px;
+  background-image:
+    radial-gradient(circle at 15% 8%, rgba(181,83,44,0.06), transparent 40%),
+    radial-gradient(circle at 85% 92%, rgba(46,92,88,0.07), transparent 45%);
+}
+
+.hero {
+  width:100%;
+  max-width:900px;
+  padding:36px 24px 24px;
+  text-align:center;
+  position:relative;
+}
+
+.eyebrow {
+  font-size:11px;
+  letter-spacing:3px;
+  text-transform:uppercase;
+  color:var(--clay);
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.hero h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:600;
+  font-size:46px;
+  line-height:1.1;
+  letter-spacing:0.5px;
+}
+
+.hero h1 .ar {
+  font-family:'Noto Naskh Arabic',serif;
+  color:var(--clay);
+}
+
+.hero h1 .ur {
+  font-family:'Noto Nastaliq Urdu',serif;
+  color:var(--teal);
+  font-size:0.85em;
+}
+
+.hero-sub {
+  font-size:18px;
+  color:#6b6354;
+  margin-top:10px;
+  font-style:italic;
+  font-family:'Cormorant Garamond',serif;
+}
+
+.divider-orn {
+  width:60px; height:2px;
+  background:var(--gold);
+  margin:18px auto;
+  position:relative;
+}
+.divider-orn::before, .divider-orn::after {
+  content:'◆';
+  color:var(--gold);
+  position:absolute;
+  top:-7px;
+  font-size:11px;
+}
+.divider-orn::before { left:-16px; }
+.divider-orn::after { right:-16px; }
+
+.lang-bar {
+  display:flex;
+  gap:10px;
+  justify-content:center;
+  margin-top:8px;
+  flex-wrap:wrap;
+}
+
+.lang-pill {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 20px;
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:30px;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-size:14px;
+  font-weight:600;
+}
+
+.lang-pill:hover { border-color:var(--clay); }
+
+.lang-pill.active {
+  background:var(--ink);
+  border-color:var(--ink);
+  color:var(--card);
+}
+
+.lang-pill .flag { font-size:18px; }
+
+.mode-toggle {
+  display:flex;
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:30px;
+  padding:4px;
+  margin-top:18px;
+  gap:4px;
+}
+
+.mode-btn {
+  padding:8px 20px;
+  border-radius:24px;
+  border:none;
+  background:transparent;
+  color:#6b6354;
+  font-size:13px;
+  font-weight:600;
+  cursor:pointer;
+  transition:all 0.2s;
+  font-family:'Inter',sans-serif;
+}
+
+.mode-btn.active {
+  background:var(--clay);
+  color:#fff;
+}
+
+.panel {
+  width:100%;
+  max-width:900px;
+  padding:0 24px;
+  margin-top:28px;
+}
+
+.lesson-bar {
+  display:none;
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:14px;
+  padding:14px 18px;
+  margin-bottom:16px;
+  gap:10px;
+  overflow-x:auto;
+}
+
+.lesson-bar.show { display:flex; }
+
+.lesson-chip {
+  white-space:nowrap;
+  padding:8px 16px;
+  background:var(--sand);
+  border-radius:20px;
+  font-size:12px;
+  font-weight:600;
+  cursor:pointer;
+  color:var(--ink);
+  border:1.5px solid transparent;
+  transition:all 0.15s;
+}
+
+.lesson-chip:hover { border-color:var(--gold); }
+.lesson-chip.active { background:var(--teal); color:#fff; }
+
+.chat-card {
+  background:var(--card);
+  border:1.5px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+  box-shadow:0 20px 50px rgba(43,38,32,0.08);
+}
+
+.chat-header {
+  background:var(--ink);
+  color:var(--sand);
+  padding:16px 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.chat-header-left {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.status-dot {
+  width:8px; height:8px;
+  background:#7FBF7F;
+  border-radius:50%;
+  animation:breathe 2s infinite;
+}
+
+@keyframes breathe { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.chat-header h3 {
+  font-size:14px;
+  font-weight:600;
+  font-family:'Inter',sans-serif;
+}
+
+.clear-btn {
+  background:none;
+  border:1px solid rgba(236,230,216,0.3);
+  color:var(--sand);
+  font-size:11px;
+  padding:6px 12px;
+  border-radius:20px;
+  cursor:pointer;
+}
+.clear-btn:hover { background:rgba(236,230,216,0.1); }
+
+.chat-window {
+  height:420px;
+  overflow-y:auto;
+  padding:24px;
+  display:flex;
+  flex-direction:column;
+  gap:16px;
+}
+
+.msg {
+  max-width:78%;
+  animation:fadeIn 0.25s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity:0; transform:translateY(6px); }
+  to { opacity:1; transform:translateY(0); }
+}
+
+.msg.user { align-self:flex-end; }
+.msg.ai { align-self:flex-start; }
+
+.msg-bubble {
+  padding:13px 17px;
+  border-radius:16px;
+  font-size:15px;
+  line-height:1.55;
+}
+
+.msg.user .msg-bubble {
+  background:var(--clay);
+  color:#fff;
+  border-bottom-right-radius:4px;
+}
+
+.msg.ai .msg-bubble {
+  background:var(--sand);
+  color:var(--ink);
+  border-bottom-left-radius:4px;
+  border:1px solid var(--line);
+}
+
+.msg-translation {
+  margin-top:6px;
+  padding:10px 14px;
+  background:rgba(46,92,88,0.06);
+  border-left:3px solid var(--teal);
+  border-radius:0 8px 8px 0;
+  font-size:13px;
+  color:var(--teal);
+  font-style:italic;
+  white-space:pre-line;
+}
+
+.msg.user .msg-translation {
+  border-left:none;
+  border-right:3px solid rgba(255,255,255,0.5);
+  background:rgba(255,255,255,0.12);
+  color:rgba(255,255,255,0.85);
+  border-radius:8px 0 0 8px;
+}
+
+.msg-meta {
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin-top:6px;
+  font-size:11px;
+  color:#9a9080;
+}
+
+.msg.user .msg-meta { justify-content:flex-end; }
+
+.speak-btn {
+  background:none;
+  border:none;
+  cursor:pointer;
+  font-size:13px;
+  opacity:0.6;
+  transition:opacity 0.15s;
+}
+.speak-btn:hover { opacity:1; }
+
+.rtl { direction:rtl; text-align:right; font-family:'Noto Naskh Arabic',serif; font-size:17px; }
+.rtl-ur { direction:rtl; text-align:right; font-family:'Noto Nastaliq Urdu',serif; font-size:18px; }
+
+.typing-indicator {
+  display:flex;
+  gap:4px;
+  padding:14px 17px;
+  background:var(--sand);
+  border-radius:16px;
+  border-bottom-left-radius:4px;
+  border:1px solid var(--line);
+  width:fit-content;
+}
+
+.typing-dot {
+  width:6px; height:6px;
+  background:#9a9080;
+  border-radius:50%;
+  animation:typingBounce 1.2s infinite;
+}
+.typing-dot:nth-child(2) { animation-delay:0.2s; }
+.typing-dot:nth-child(3) { animation-delay:0.4s; }
+
+@keyframes typingBounce {
+  0%,60%,100% { transform:translateY(0); }
+  30% { transform:translateY(-5px); }
+}
+
+.input-bar {
+  border-top:1.5px solid var(--line);
+  padding:16px 20px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  background:var(--card);
+}
+
+.mic-btn {
+  width:46px; height:46px;
+  border-radius:50%;
+  border:none;
+  background:var(--teal);
+  color:#fff;
+  font-size:18px;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:all 0.2s;
+}
+
+.mic-btn:hover { background:#244b47; }
+
+.mic-btn.recording {
+  background:var(--clay);
+  animation:micPulse 1s infinite;
+  transform:scale(1.1);
+}
+
+.mic-btn {
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+
+@keyframes micPulse {
+  0%,100% { box-shadow:0 0 0 0 rgba(181,83,44,0.5); }
+  50% { box-shadow:0 0 0 10px rgba(181,83,44,0); }
+}
+
+.text-input {
+  flex:1;
+  border:1.5px solid var(--line);
+  border-radius:24px;
+  padding:12px 18px;
+  font-size:14px;
+  font-family:'Inter',sans-serif;
+  background:#fff;
+  color:var(--ink);
+}
+
+.text-input:focus { outline:none; border-color:var(--gold); }
+
+.send-btn {
+  width:46px; height:46px;
+  border-radius:50%;
+  border:none;
+  background:var(--ink);
+  color:var(--sand);
+  font-size:16px;
+  cursor:pointer;
+  flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:transform 0.15s;
+}
+
+.send-btn:hover { transform:scale(1.06); }
+.send-btn:active { transform:scale(0.95); }
+
+.voice-row {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px 22px;
+  background:rgba(184,146,61,0.08);
+  font-size:12px;
+  color:#6b6354;
+  flex-wrap:wrap;
+  gap:8px;
+}
+
+.toggle-wrap {
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.switch {
+  position:relative;
+  width:36px; height:20px;
+}
+.switch input { opacity:0; width:0; height:0; }
+.slider-toggle {
+  position:absolute; cursor:pointer;
+  inset:0;
+  background:#c9bfa8;
+  border-radius:20px;
+  transition:0.2s;
+}
+.slider-toggle::before {
+  content:'';
+  position:absolute;
+  height:14px; width:14px;
+  left:3px; bottom:3px;
+  background:#fff;
+  border-radius:50%;
+  transition:0.2s;
+}
+input:checked + .slider-toggle { background:var(--teal); }
+input:checked + .slider-toggle::before { transform:translateX(16px); }
+
+.footer-note {
+  max-width:900px;
+  padding:0 24px;
+  margin-top:18px;
+  text-align:center;
+  font-size:12px;
+  color:#9a9080;
+  line-height:1.6;
+}
+
+.chat-window::-webkit-scrollbar { width:6px; }
+.chat-window::-webkit-scrollbar-thumb { background:var(--line); border-radius:10px; }
+
+@media (max-width:600px) {
+  .hero h1 { font-size:32px; }
+  .chat-window { height:360px; }
+  .msg { max-width:88%; }
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="eyebrow">Daily Language Practice</div>
+  <h1>Lisaan <span class="ar">لسان</span> · <span class="ur">زبان</span></h1>
+  <div class="hero-sub">Your trilingual conversation partner</div>
+  <div class="divider-orn"></div>
+
+  <div class="lang-bar" id="langBar">
+    <div class="lang-pill active" data-lang="ur" onclick="selectLang('ur', this)">
+      <span class="flag">🇵🇰</span> Urdu Mode
+    </div>
+    <div class="lang-pill" data-lang="en" onclick="selectLang('en', this)">
+      <span class="flag">🇬🇧</span> English Mode
+    </div>
+    <div class="lang-pill" data-lang="ar" onclick="selectLang('ar', this)">
+      <span class="flag">🇦🇪</span> Arabic Mode
+    </div>
+  </div>
+
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="freeModeBtn" onclick="setMode('free')">💬 Free Talk</button>
+    <button class="mode-btn" id="lessonModeBtn" onclick="setMode('lesson')">📖 Structured Lessons</button>
+  </div>
+</div>
+
+<div class="panel">
+
+  <div class="lesson-bar" id="lessonBar">
+    <div class="lesson-chip active" onclick="pickLesson('greetings', this)">👋 Greetings</div>
+    <div class="lesson-chip" onclick="pickLesson('restaurant', this)">🍽️ At a Restaurant</div>
+    <div class="lesson-chip" onclick="pickLesson('shopping', this)">🛍️ Shopping</div>
+    <div class="lesson-chip" onclick="pickLesson('work', this)">💼 Office & Work</div>
+    <div class="lesson-chip" onclick="pickLesson('directions', this)">🗺️ Directions</div>
+    <div class="lesson-chip" onclick="pickLesson('logistics', this)">🚛 Logistics Talk</div>
+    <div class="lesson-chip" onclick="pickLesson('numbers', this)">🔢 Numbers & Time</div>
+  </div>
+
+  <div class="chat-card">
+    <div class="chat-header">
+      <div class="chat-header-left">
+        <div class="status-dot"></div>
+        <h3 id="chatHeaderTitle">Practicing: Urdu → translated to English & Arabic</h3>
+      </div>
+      <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+    </div>
+
+    <div class="chat-window" id="chatWindow"></div>
+
+    <div class="voice-row">
+      <div class="toggle-wrap">
+        <label class="switch">
+          <input type="checkbox" id="autoSpeak" checked>
+          <span class="slider-toggle"></span>
+        </label>
+        <span>🔊 Auto-read responses aloud</span>
+      </div>
+      <span id="voiceStatus">🎙️ Hold mic to record, release to send</span>
+    </div>
+
+    <div class="input-bar">
+      <button class="mic-btn" id="micBtn">🎤</button>
+      <input type="text" class="text-input" id="textInput" placeholder="Type in Urdu, English, or Arabic..." onkeypress="if(event.key==='Enter')sendMessage()">
+      <button class="send-btn" onclick="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>
+
+<div class="footer-note">
+  Speak or type in any of the three languages. I'll reply in the language you're practicing, then show the translation underneath. Tap 🔊 on any message to hear it spoken aloud.
+</div>
+
+<script>
+const langNames = { ur: 'Urdu', en: 'English', ar: 'Arabic' };
+const langCodes = { ur: 'ur-PK', en: 'en-US', ar: 'ar-SA' };
+let currentLang = 'ur';
+let currentMode = 'free';
+let currentLesson = 'greetings';
+let recognizing = false;
+let recognition = null;
+
+const lessonTopics = {
+  greetings: 'greeting people, introducing yourself, asking how someone is doing',
+  restaurant: 'ordering food at a restaurant, asking for the menu, asking for the bill',
+  shopping: 'shopping at a market or mall, asking prices, bargaining, paying',
+  work: 'office conversations, talking about your job, scheduling meetings, emails',
+  directions: 'asking for and giving directions, talking about locations and transport',
+  logistics: 'logistics and shipping vocabulary, talking about trucks, deliveries, drivers, and freight (relevant to transport/logistics work)',
+  numbers: 'numbers, telling time, days of the week, dates'
+};
+
+function selectLang(lang, el) {
+  currentLang = lang;
+  document.querySelectorAll('.lang-pill').forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  const others = Object.keys(langNames).filter(l => l !== lang).map(l => langNames[l]).join(' & ');
+  document.getElementById('chatHeaderTitle').textContent =
+    'Practicing: ' + langNames[lang] + ' \u2192 translated to ' + others;
+  document.getElementById('textInput').placeholder = 'Type in ' + langNames[lang] + '...';
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('freeModeBtn').classList.toggle('active', mode==='free');
+  document.getElementById('lessonModeBtn').classList.toggle('active', mode==='lesson');
+  document.getElementById('lessonBar').classList.toggle('show', mode==='lesson');
+}
+
+function pickLesson(topic, el) {
+  currentLesson = topic;
+  document.querySelectorAll('.lesson-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+  addAIMessage('Great choice! Let\'s practice ' + topic + '. Reply in ' + langNames[currentLang] + ' and I\'ll help you along the way.', null, true);
+  startLessonTopic(topic);
+}
+
+async function startLessonTopic(topic) {
+  showTyping();
+  try {
+    const prompt = 'You are a friendly, encouraging language tutor helping a student practice ' + langNames[currentLang] + '. The lesson topic is: ' + lessonTopics[topic] + '. Start a short, natural conversational opener (1-2 sentences) in ' + langNames[currentLang] + ' related to this topic, to kick off the practice. Respond ONLY with valid JSON in this exact format, no markdown, no code fences: {"reply": "your opener in ' + langNames[currentLang] + '", "translation_en": "English translation", "translation_other": "translation in the other non-English language among Urdu/Arabic that is not the practice language"}';
+    const result = await callClaude(prompt);
+    hideTyping();
+    renderAIResult(result);
+  } catch(e) {
+    hideTyping();
+    addAIMessage('Sorry, something went wrong starting the lesson. Try again!', null, true);
+  }
+}
+
+function getRtlClass(lang) {
+  if (lang === 'ar') return 'rtl';
+  if (lang === 'ur') return 'rtl-ur';
+  return '';
+}
+
+function addUserMessage(text) {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = 'msg user';
+  const rtlClass = getRtlClass(currentLang);
+  div.innerHTML =
+    '<div class="msg-bubble ' + rtlClass + '">' + escapeHtml(text) + '</div>' +
+    '<div class="msg-meta">' +
+      '<button class="speak-btn" onclick="speak(' + JSON.stringify(text) + ', ' + JSON.stringify(currentLang) + ')">\u{1F50A}</button>' +
+      '<span>You</span>' +
+    '</div>';
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
+
+function addAIMessage(text, translation, isSystem) {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  const rtlClass = isSystem ? '' : getRtlClass(currentLang);
+  div.innerHTML =
+    '<div class="msg-bubble ' + rtlClass + '">' + escapeHtml(text) + '</div>' +
+    (translation ? '<div class="msg-translation">' + escapeHtml(translation) + '</div>' : '') +
+    '<div class="msg-meta">' +
+      '<button class="speak-btn" onclick="speak(' + JSON.stringify(text) + ', ' + JSON.stringify(currentLang) + ')">\u{1F50A}</button>' +
+      '<span>Partner</span>' +
+    '</div>';
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+
+  if (!isSystem && document.getElementById('autoSpeak').checked) {
+    speak(text, currentLang);
+  }
+}
+
+function showTyping() {
+  const win = document.getElementById('chatWindow');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.id = 'typingIndicator';
+  div.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+  win.appendChild(div);
+  win.scrollTop = win.scrollHeight;
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function escapeHtml(s) {
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function clearChat() {
+  document.getElementById('chatWindow').innerHTML = '';
+  showWelcome();
+}
+
+function showWelcome() {
+  addAIMessage(
+    "Assalam-o-Alaikum! Main aapka language practice partner hoon. Aap mujhse Urdu, English ya Arabic mein baat kar sakte hain.",
+    "Hello! I'm your language practice partner. You can talk to me in Urdu, English, or Arabic — I'll translate it for you.",
+    true
+  );
+}
+
+async function sendMessage() {
+  const input = document.getElementById('textInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  addUserMessage(text);
+  showTyping();
+
+  try {
+    const otherLangs = Object.keys(langNames).filter(function(l){ return l !== currentLang; }).map(function(l){ return langNames[l]; });
+    const modeContext = currentMode === 'lesson'
+      ? ' We are doing a structured lesson on the topic: ' + lessonTopics[currentLesson] + '. Keep the conversation focused on this topic and gently guide the student, correcting mistakes kindly if needed.'
+      : ' This is free, casual conversation practice — talk about whatever the student brings up, be warm and natural.';
+
+    const prompt = 'You are a friendly, patient, encouraging language conversation partner helping someone practice ' + langNames[currentLang] + '.' + modeContext + ' The student just said (in ' + langNames[currentLang] + ' or possibly mixed): "' + text + '". Reply naturally and conversationally in ' + langNames[currentLang] + ' (2-3 sentences max, keep it light and encouraging, ask a natural follow-up question to keep conversation going). If the student made a small grammar/vocab mistake, gently model the correct form naturally in your reply without being preachy about it. Respond ONLY with valid JSON, no markdown formatting, no code fences, in this exact structure: {"reply": "your conversational reply in ' + langNames[currentLang] + '", "translation_en": "English translation of your reply", "translation_other": "translation of your reply in ' + otherLangs.filter(function(l){return l!=='English';})[0] + '"}';
+
+    const result = await callClaude(prompt);
+    hideTyping();
+    renderAIResult(result);
+  } catch (e) {
+    hideTyping();
+    addAIMessage('Connection error — please try again.', null, true);
+    console.error(e);
+  }
+}
+
+function renderAIResult(result) {
+  const reply = result.reply || '...';
+  let translation = '';
+  if (currentLang === 'en') {
+    translation = result.translation_other || '';
+  } else {
+    translation = result.translation_en || '';
+    if (result.translation_other) translation += '\n' + result.translation_other;
+  }
+  addAIMessage(reply, translation);
+}
+
+async function callClaude(promptText) {
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 600,
+      messages: [{ role: "user", content: promptText }]
+    })
+  });
+  const data = await response.json();
+  const textBlock = data.content.find(function(c){ return c.type === 'text'; });
+  let raw = textBlock ? textBlock.text : '{}';
+  raw = raw.replace(/```json|```/g, '').trim();
+  return JSON.parse(raw);
+}
+
+function speak(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = langCodes[lang] || 'en-US';
+  utter.rate = 0.92;
+  window.speechSynthesis.speak(utter);
+}
+
+function initRecognition() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    document.getElementById('voiceStatus').textContent = '\u26A0\uFE0F Voice input not supported in this browser — try Chrome';
+    return null;
+  }
+  const rec = new SR();
+  rec.continuous = true;
+  rec.interimResults = true;
+  rec.maxAlternatives = 1;
+
+  rec.onresult = function(event) {
+    let finalText = '';
+    let interimText = '';
+    for (let i = 0; i < event.results.length; i++) {
+      if (event.results[i].isFinal) {
+        finalText += event.results[i][0].transcript;
+      } else {
+        interimText += event.results[i][0].transcript;
+      }
+    }
+    document.getElementById('textInput').value = (finalText + ' ' + interimText).trim();
+  };
+
+  rec.onerror = function(event) {
+    if (event.error === 'no-speech') return;
+    let msg = '\u26A0\uFE0F Mic error: ' + event.error;
+    if (event.error === 'not-allowed' || event.error === 'permission-denied') {
+      msg = '\u26A0\uFE0F Mic permission blocked — check browser/site settings and allow microphone access';
+    } else if (event.error === 'audio-capture') {
+      msg = '\u26A0\uFE0F No microphone found on this device';
+    } else if (event.error === 'network') {
+      msg = '\u26A0\uFE0F Network error — speech recognition needs internet connection';
+    }
+    document.getElementById('voiceStatus').textContent = msg;
+    document.getElementById('micBtn').classList.remove('recording');
+    holdActive = false;
+    recognizing = false;
+  };
+
+  rec.onend = function() {
+    recognizing = false;
+  };
+
+  return rec;
+}
+
+let holdActive = false;
+let holdStartTime = 0;
+let lastEventTime = 0;
+
+function startHold(e) {
+  const now = Date.now();
+  if (now - lastEventTime < 100) return; // dedupe touch+mouse firing together
+  lastEventTime = now;
+
+  if (e && e.cancelable) e.preventDefault();
+  if (holdActive) return;
+  holdActive = true;
+  holdStartTime = Date.now();
+
+  // Diagnostic check
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) {
+    document.getElementById('voiceStatus').textContent = '\u26A0\uFE0F This browser/app does not support voice input. Try opening this file in Chrome directly.';
+    holdActive = false;
+    return;
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    document.getElementById('voiceStatus').textContent = '\u26A0\uFE0F Microphone API blocked in this app. Open this HTML file in Chrome browser instead.';
+    holdActive = false;
+    return;
+  }
+
+  if (!recognition) recognition = initRecognition();
+  if (!recognition) {
+    holdActive = false;
+    return;
+  }
+
+  recognition.lang = langCodes[currentLang];
+  try {
+    recognition.start();
+    recognizing = true;
+    document.getElementById('micBtn').classList.add('recording');
+    document.getElementById('voiceStatus').textContent = '\u{1F534} Recording... release to send';
+  } catch(err) {
+    console.error('Recognition start error:', err);
+    document.getElementById('voiceStatus').textContent = '\u26A0\uFE0F Could not start mic: ' + err.name + ' - ' + err.message;
+    holdActive = false;
+  }
+}
+
+function endHold(e) {
+  const now = Date.now();
+  if (now - lastEventTime < 100 && e && e.type !== 'mouseup' && e.type !== 'touchend') return;
+
+  if (e && e.cancelable) e.preventDefault();
+  if (!holdActive) return;
+  holdActive = false;
+
+  const heldDuration = Date.now() - holdStartTime;
+  document.getElementById('micBtn').classList.remove('recording');
+
+  if (recognition && recognizing) {
+    try { recognition.stop(); } catch(err) { console.error(err); }
+  }
+
+  if (heldDuration < 350) {
+    document.getElementById('voiceStatus').textContent = '\u{1F3A4} Hold mic to record, release to send';
+    return;
+  }
+
+  document.getElementById('voiceStatus').textContent = '\u23F3 Processing...';
+
+  setTimeout(function() {
+    const text = document.getElementById('textInput').value.trim();
+    document.getElementById('voiceStatus').textContent = '\u{1F3A4} Hold mic to record, release to send';
+    if (text) {
+      sendMessage();
+    }
+  }, 400);
+}
+
+function cancelHoldIfActive(e) {
+  if (!holdActive) return;
+  holdActive = false;
+  document.getElementById('micBtn').classList.remove('recording');
+  if (recognition && recognizing) {
+    try { recognition.stop(); } catch(err) {}
+  }
+  document.getElementById('textInput').value = '';
+  document.getElementById('voiceStatus').textContent = '\u{1F3A4} Hold mic to record, release to send';
+}
+
+// ── BIND EVENTS (avoids inline-handler double-firing on mobile) ──
+(function bindMicEvents() {
+  const btn = document.getElementById('micBtn');
+  if (!btn) return;
+
+  // Check secure context — mic requires HTTPS (or localhost)
+  if (!window.isSecureContext) {
+    document.getElementById('voiceStatus').textContent = '\u26A0\uFE0F Mic needs a secure (https) page to work in this browser';
+  }
+
+  let touchHandled = false;
+
+  btn.addEventListener('touchstart', function(e) {
+    touchHandled = true;
+    startHold(e);
+  }, { passive: false });
+
+  btn.addEventListener('touchend', function(e) {
+    endHold(e);
+    setTimeout(function(){ touchHandled = false; }, 300);
+  }, { passive: false });
+
+  btn.addEventListener('touchcancel', function(e) {
+    cancelHoldIfActive(e);
+    touchHandled = false;
+  }, { passive: false });
+
+  btn.addEventListener('mousedown', function(e) {
+    if (touchHandled) return;
+    startHold(e);
+  });
+
+  btn.addEventListener('mouseup', function(e) {
+    if (touchHandled) return;
+    endHold(e);
+  });
+
+  btn.addEventListener('mouseleave', function(e) {
+    if (touchHandled) return;
+    cancelHoldIfActive(e);
+  });
+})();
+
+showWelcome();
+</script>
+</body>
+</html>
